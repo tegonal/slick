@@ -17,6 +17,9 @@ object Settings {
   lazy val sampleOverridden = AttributeKey[Boolean]("sample-settings-overridden")
   lazy val updateSampleCommand = Command.command("update-sample")(updateSampleSettings)
 
+  lazy val sampleOverridden = AttributeKey[Boolean]("sample-settings-overridden")
+  lazy val updateSampleCommand = Command.command("update-sample")(updateSampleSettings)
+
   val cleanCompileTimeTests = taskKey[Unit]("Delete files used for compile-time tests which should be recompiled every time.")
 
   val repoKind = settingKey[String]("""Maven repository kind ("snapshots" or "releases")""")
