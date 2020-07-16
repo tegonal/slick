@@ -28,12 +28,11 @@ object Settings {
 
   /* Test Configuration for running tests on doc sources */
   val DocTest = config("doctest") extend(Test)
-  val MacroConfig = config("macro")
+  val CompileConfig = config("compile")
+  val TestConfig = config("test")
 
   def slickProjectSettings = (
     slickGeneralSettings ++
-      compilerDependencySetting("macro") ++
-      inConfig(MacroConfig)(Defaults.configSettings) ++
       FMPP.preprocessorSettings ++
       extTarget("slick") ++
       Docs.scaladocSettings ++
@@ -73,8 +72,6 @@ object Settings {
           ProblemFilters.exclude[DirectMissingMethodProblem]("slick.util.AsyncExecutor.apply$default$6"),
           ProblemFilters.exclude[DirectMissingMethodProblem]("slick.util.AsyncExecutor.apply$default$7")
         ),
-        ivyConfigurations += MacroConfig.hide.extend(Compile),
-        Compile / unmanagedClasspath  ++= (MacroConfig / products).value,
         libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value % "provided",
         (Compile / packageSrc / mappings) ++= (MacroConfig / packageSrc / mappings).value,
         (Compile / packageBin / mappings) ++= (MacroConfig / packageBin / mappings).value,
@@ -291,7 +288,6 @@ object Settings {
     unmanagedJars := Attributed.blankSeq(scalaInstance.value.allJars.toSeq),
     Compile / unmanagedJars := Attributed.blankSeq(scalaInstance.value.allJars.toSeq),
     Test / unmanagedJars := Attributed.blankSeq(scalaInstance.value.allJars.toSeq),
-    MacroConfig / unmanagedJars := Attributed.blankSeq(scalaInstance.value.allJars.toSeq)
   )
 
   def sampleProject(s: String): Project = Project(id = "sample-"+s, base = file("samples/"+s)).settings(
@@ -339,7 +335,5 @@ object Settings {
 
     Compile / unmanagedClasspath :=
       Attributed.blank(baseDirectory.value.getParentFile / "resources") +: (Compile / unmanagedClasspath).value,
-
-    Compile / unmanagedClasspath ++= (LocalProject("slick") / MacroConfig / products).value
   )
 }
