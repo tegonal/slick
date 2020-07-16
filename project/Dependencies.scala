@@ -13,9 +13,9 @@ object Dependencies {
   val reactiveStreamsVersion = "1.0.3"
   val reactiveStreams = "org.reactivestreams" % "reactive-streams" % reactiveStreamsVersion
   val reactiveStreamsTCK = "org.reactivestreams" % "reactive-streams-tck" % reactiveStreamsVersion
-  val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2"
 
-  def mainDependencies = Seq(slf4j, typesafeConfig, reactiveStreams, scalaCollectionCompat)
+
+  def mainDependencies = Seq(slf4j, typesafeConfig, reactiveStreams)
 
   val junit = Seq(
     "junit" % "junit-dep" % "4.11",
