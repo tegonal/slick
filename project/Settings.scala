@@ -72,9 +72,10 @@ object Settings {
           ProblemFilters.exclude[DirectMissingMethodProblem]("slick.util.AsyncExecutor.apply$default$6"),
           ProblemFilters.exclude[DirectMissingMethodProblem]("slick.util.AsyncExecutor.apply$default$7")
         ),
-        libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value % "provided",
-        (Compile / packageSrc / mappings) ++= (MacroConfig / packageSrc / mappings).value,
-        (Compile / packageBin / mappings) ++= (MacroConfig / packageBin / mappings).value,
+        libraryDependencies ++= {
+          if(!scalaVersion.value.startsWith("2.")) Nil
+          else Seq("org.scala-lang" % "scala-compiler" % scalaVersion.value % "provided")
+        }
       )
   )
 
@@ -246,7 +247,7 @@ object Settings {
   )
 
   def slickScalacSettings = Seq(
-    scalacOptions ++= List("-deprecation", "-feature", "-unchecked"),
+    scalacOptions ++= List("-deprecation", "-feature", "-unchecked", "-language:implicitConversions"),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, v)) if v <= 12 =>
@@ -269,9 +270,10 @@ object Settings {
 
   // set the scala-compiler dependency unless a local scala is in use
   def compilerDependencySetting(config: String) =
-    if (sys.props("scala.home.local") != null) Nil else Seq(
-      libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value % config
-    )
+    libraryDependencies ++= {
+      if (sys.props("scala.home.local") != null || !scalaVersion.value.startsWith("2.")) Nil
+      else Seq("org.scala-lang" % "scala-compiler" % scalaVersion.value % config)
+    }
 
   def publishedScalaSettings = Seq(
     scalaVersion := Dependencies.scalaVersions.tail.head,
