@@ -9,4 +9,4 @@ addSbtPlugin("de.johoop" % "sbt-testng-plugin" % "3.1.1")
 
 addSbtPlugin("com.novocode" % "sbt-ornate" % "0.6")
 
-addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.4.2")
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.5.1")
