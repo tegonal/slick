@@ -362,7 +362,7 @@ class AggregateTest extends AsyncTest[RelationalTestDB] {
       def a = column[String]("a")
       def b = column[String]("b")
 
-      def * = (id, a, b) <> ((BData.apply _).tupled, BData.unapply)
+      def * = (id, a, b).mapTo[BData]
     }
 
     val bs = TableQuery[B]
