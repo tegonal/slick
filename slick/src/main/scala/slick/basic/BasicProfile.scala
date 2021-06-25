@@ -42,6 +42,8 @@ trait BasicProfile extends BasicActionComponent { self: BasicProfile =>
     type SlickException = slick.SlickException
 
     implicit val slickProfile: self.type = self
+    @deprecated("Use `slickProfile` instead of `slickDriver`", "3.2")
+    val slickDriver: self.type = slickProfile
 
     implicit final def anyToShapedValue[T, U](value: T)(implicit shape: Shape[_ <: FlatShapeLevel, T, U, _]): ShapedValue[T, U] =
       new ShapedValue[T, U](value, shape)
@@ -81,7 +83,7 @@ trait BasicProfile extends BasicActionComponent { self: BasicProfile =>
     * which should be computed lazily. */
   type CompiledInsert
 
-  /** (Partially) ompile an AST for insert operations */
+  /** (Partially) compile an AST for insert operations */
   def compileInsert(n: Node): CompiledInsert
 
   /* internal: */

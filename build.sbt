@@ -110,7 +110,9 @@ ThisBuild / scalaVersion := Dependencies.scalaVersions.last
 // The goal is not to stop any breaking change, but to make us aware.
 // For each breaking change we should add MiMa exclusions.
 // This will also help us decide when a PR can be backported in 3.3.x branch.
-ThisBuild / binaryCompatSlickVersion := None
+ThisBuild / binaryCompatSlickVersion := {
+  if (scalaBinaryVersion.value.startsWith("2.13")) None else Some("3.3.0")
+}
 
 ThisBuild / docDir := (root / baseDirectory).value / "doc"
 
@@ -348,6 +350,7 @@ lazy val `sample-hello-slick` =
     .in(file("samples/hello-slick"))
     .settings(sampleSettings)
     .dependsOn(slick)
+
 
 lazy val `sample-slick-multidb` =
   project
