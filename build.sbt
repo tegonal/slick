@@ -309,14 +309,14 @@ lazy val hikaricp =
       libraryDependencies += Dependencies.hikariCP,
     )
 
-lazy val `reactive-streams-test` =
+lazy val `reactive-streams-tests` =
   project
     .dependsOn(testkit)
     .settings(
       slickGeneralSettings,
       name := "Slick-ReactiveStreamsTests",
       resolvers += Resolver.sbtPluginRepo("releases"),
-      libraryDependencies += "org.scalatestplus" %% "testng-6-7" % "3.2.6.0",
+      libraryDependencies += "org.scalatestplus" %% "testng-6-7" % "3.2.9.0",
       libraryDependencies ++=
         (Dependencies.logback +: Dependencies.testDBs).map(_ % Test),
       libraryDependencies += Dependencies.reactiveStreamsTCK,
@@ -387,7 +387,7 @@ lazy val root =
         Def.sequential(
           testkit / Test / test,
           testkit / DocTest / test,
-          `reactive-streams-test` / Test / test,
+          `reactive-streams-tests` / Test / test,
           slick / Compile / packageDoc,
           codegen / Compile / packageDoc,
           hikaricp / Compile / packageDoc,

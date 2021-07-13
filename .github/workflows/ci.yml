@@ -11,12 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        java: [1.8.0, 1.11.0, 1.16.0]
+        java: [8, 11, 17-ea]
         scala: [2.13.5, 3.0.0]
-        exclude:
-        - java: 1.16.0
-          scala: 2.12.3
 
     services:
       postgres:
@@ -36,14 +34,14 @@ jobs:
         - 49160:22
         - 49161:1521
       sqlserver:
-        image: microsoft/mssql-server-linux:2017-latest
+        image: mcr.microsoft.com/mssql/server:2017-latest
         env:
           ACCEPT_EULA: Y
           MSSQL_SA_PASSWORD: Freeslick18
         ports:
         - 1401:1433
       db2:
-        image: ibmcom/db2:latest
+        image: ibmcom/db2:11.5.5.1
         ports:
         - 50000:50000
         env:
@@ -67,9 +65,10 @@ jobs:
     - name: Start MySQL
       run: docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -p 3306:3306 mysql --disable-log-bin
 
-    - name: Setup Java and Scala
-      uses: olafurpg/setup-scala@v10
+    - name: Set up JDK
+      uses: actions/setup-java@v2
       with:
+        distribution: adopt
         java-version: ${{ matrix.java }}
 
     - if: ${{ startsWith('refs/tags/', github.ref) }}
