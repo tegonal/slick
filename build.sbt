@@ -1,5 +1,6 @@
 import Docs.docDir
 import com.jsuereth.sbtpgp.PgpKeys
+import com.typesafe.tools.mima.core.{DirectMissingMethodProblem, IncompatibleMethTypeProblem, MissingClassProblem, ProblemFilters, ReversedMissingMethodProblem}
 
 
 val testAll = taskKey[Unit]("Run all tests")
@@ -8,6 +9,7 @@ val testSampleHelloSlick = taskKey[Unit]("Run tests in the hello-slick sample ap
 val testSamplePlainSql = taskKey[Unit]("Run tests in the plain-sql sample app")
 val testSampleMultiDb = taskKey[Unit]("Run tests in the multidb sample app")
 val testSampleTestkit = taskKey[Unit]("Run tests in the testkit-example sample app")
+val binaryCompatSlickVersion = settingKey[Option[String]]("")
 
 val cleanCompileTimeTests =
   taskKey[Unit]("Delete files used for compile-time tests which should be recompiled every time.")
@@ -159,6 +161,10 @@ ThisBuild / versionScheme := Some("pvp")
 ThisBuild / docDir := (root / baseDirectory).value / "doc"
 
 
+ThisBuild / binaryCompatSlickVersion  := Some("3.3.0")
+
+
+
 lazy val slick =
   project
     .enablePlugins(SDLCPlugin, MimaPlugin)
@@ -180,9 +186,10 @@ lazy val slick =
       // suppress test status output
       test := {},
       testOnly := {},
+      mimaCheckDirection := "both",
 
       mimaPreviousArtifacts :=
-        binaryCompatSlickVersion.value.toSet
+        (ThisBuild / binaryCompatSlickVersion).value.toSet
           .map((v: String) => "com.typesafe.slick" % ("slick_" + scalaBinaryVersion.value) % v),
 
       mimaBinaryIssueFilters ++= Seq(
