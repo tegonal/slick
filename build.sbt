@@ -1,10 +1,6 @@
 import Docs.docDir
 import com.jsuereth.sbtpgp.PgpKeys
-import com.typesafe.tools.mima.core._
 
-
-val binaryCompatSlickVersion =
-  settingKey[Option[String]]("The slick version this build should be compatible with, if any")
 
 val testAll = taskKey[Unit]("Run all tests")
 val testAllSamples = taskKey[Unit]("Run tests in the all sample apps")
@@ -158,14 +154,7 @@ ThisBuild / version := "3.4.0-SNAPSHOT"
 ThisBuild / crossScalaVersions := Dependencies.scalaVersions
 ThisBuild / scalaVersion := Dependencies.scalaVersions.last
 
-// Slick base version for binary compatibility checks.
-// The next release to be cut from master will be 3.4.0 during develop of 3.4.0 we check compatibility with 3.3.0.
-// The goal is not to stop any breaking change, but to make us aware.
-// For each breaking change we should add MiMa exclusions.
-// This will also help us decide when a PR can be backported in 3.3.x branch.
-ThisBuild / binaryCompatSlickVersion := {
-  if (scalaBinaryVersion.value.startsWith("2.13")) None else Some("3.3.0")
-}
+ThisBuild / versionScheme := Some("pvp")
 
 ThisBuild / docDir := (root / baseDirectory).value / "doc"
 
@@ -392,7 +381,7 @@ lazy val root =
           codegen / Compile / packageDoc,
           hikaricp / Compile / packageDoc,
           testkit / Compile / packageDoc,
-          slick / Compile / mimaReportBinaryIssues // enable for minor versions
+          versionSchemeEnforcerCheck
         ).value
       },
       libraryDependencies := {
