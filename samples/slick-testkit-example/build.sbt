@@ -1,7 +1,7 @@
 libraryDependencies ++= List(
-  "com.novocode" % "junit-interface" % "0.11" % Test,
-  "ch.qos.logback" % "logback-classic" % "1.2.6" % Test,
-  "org.postgresql" % "postgresql" % "42.2.23" % Test,
+  "com.github.sbt" % "junit-interface" % "0.13.3" % Test,
+  "ch.qos.logback" % "logback-classic" % "1.2.10" % Test,
+  "org.postgresql" % "postgresql" % "42.3.1" % Test,
 )
 scalaVersion := "2.12.14"
 scalacOptions += "-deprecation"

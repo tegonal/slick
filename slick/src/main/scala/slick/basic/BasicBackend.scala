@@ -320,7 +320,7 @@ trait BasicBackend { self =>
               var demand = ctx.demandBatch
               var realDemand = if(demand < 0) demand - Long.MinValue else demand
 
-              while({
+              while({{
                 try {
                   if(debug)
                     streamLogger.debug((if(state eq null) "Starting initial" else "Restarting ") + " streaming action, realDemand = " + str(realDemand))
@@ -365,8 +365,7 @@ trait BasicBackend { self =>
                 demand = ctx.delivered(demand)
                 realDemand = if(demand < 0) demand - Long.MinValue else demand
 
-                ((state ne null) && realDemand > 0)
-              }) ()
+              }; (state ne null) && realDemand > 0}) ()
 
               if(debug) {
                 if(state ne null) streamLogger.debug("Suspending streaming action with continuation (more data available)")
